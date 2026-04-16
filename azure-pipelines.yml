@@ -5,24 +5,15 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'azure-conn'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      echo "Testing connection..."
+      echo "==== ACCOUNT ===="
       az account show
+
+      echo "==== RESOURCE GROUPS ===="
       az group list -o table
-- task: AzureResourceManagerTemplateDeployment@3
-  inputs:
-    deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: 'azure-conn'
-    subscriptionId: '<your-subscription-id>'
-    action: 'Create Or Update Resource Group'
-    resourceGroupName: 'demo-rg'
-    location: 'Central India'
-    templateLocation: 'Linked artifact'
-    csmFile: 'azuredeploy.json'
-    csmParametersFile: 'azuredeploy.parameters.json'
-    deploymentMode: 'Incremental'
