@@ -6,14 +6,24 @@ pool:
 
 steps:
 
+# Test connection (optional)
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'azure-conn'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      echo "==== ACCOUNT ===="
       az account show
-
-      echo "==== RESOURCE GROUPS ===="
       az group list -o table
+
+# Deploy ARM template
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'azure-conn'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az deployment group create \
+        --resource-group demo-rg \
+        --template-file azuredeploy.json \
+        --parameters azuredeploy.parameters.json
