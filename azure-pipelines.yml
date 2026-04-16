@@ -5,7 +5,15 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'azure-conn'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      echo "Testing connection..."
+      az account show
+      az group list -o table
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
     deploymentScope: 'Resource Group'
